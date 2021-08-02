@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+//use App\Http\Controllers\api\ProductController;
+//use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +24,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::namespace('API')->group(function () {
     Route::post('login', 'AuthController@login');
+    Route::get('all', 'AuthController@all');
+    Route::get('logout', 'AuthController@logout');
     Route::post('register', 'AuthController@register');
-
+    Route::get('details', 'AuthController@details');
+    Route::post('updateProfile', 'AuthController@updateProfile');
+    Route::post('addProduct', 'ProductController@addProduct');
+    Route::get('allProducts', 'ProductController@index');
 });
