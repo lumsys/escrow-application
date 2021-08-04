@@ -71,6 +71,8 @@ class AuthController extends Controller
 
         if(Auth::check()) {
             Auth::user()->token()->revoke();
+
+            dd(Auth::user()->token()->revoke());
             return response()->json(["status" => "success", "error" => false, "message" => "Success! You are logged out."], 200);
         }
         return response()->json(["status" => "failed", "error" => true, "message" => "Failed! You are already logged out."], 403);
@@ -104,7 +106,7 @@ public function updateProfile(Request $request){
             }else{
                 //$user = User::whereEmail($request->email)->first();
                 $user = user::find($request->user()->id);
-                //dd($request);
+                //dd($request->user()->id);
                 $user->first_name = $request->first_name;
                 $user->last_name = $request->last_name;
                 $user->phone = preg_replace('/^0/','+234',$request->phone);
