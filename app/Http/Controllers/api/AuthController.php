@@ -95,6 +95,7 @@ public function updateProfile(Request $request){
             'last_name' => 'required|min:2|max:45',
             'other_name' => 'required|min:2|max:45',
             'phone' => 'required',
+            'usertype'=> 'required',
             'address' => 'required|min:2|max:200',
             'state' => 'required',
             'local_government' => '',
@@ -112,6 +113,7 @@ public function updateProfile(Request $request){
                 $user->phone = preg_replace('/^0/','+234',$request->phone);
                 $user->other_name = $request->other_name;
                 $user->address = $request->address;
+                $user->usertype = $request->usertype;
                 $user->state = $request->state;
                 $user->local_government = $request->local_government;
 
