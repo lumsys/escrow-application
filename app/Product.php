@@ -10,6 +10,7 @@ class Product extends Model
 
 
     //
+
     protected $fillable = [
        'user_id', 'product_name', 'service', 'product_category', 'description', 'quantity', 
         'amount', 'file_path', 'category_id',
@@ -33,4 +34,5 @@ class Product extends Model
         return $this->hasMany(Order::class, 'id', 'product_id');
     
     }
+    
 }
