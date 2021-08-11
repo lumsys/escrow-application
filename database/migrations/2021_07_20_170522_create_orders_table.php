@@ -17,7 +17,6 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('product_id')->nullable();
-            $table->integer('seller_id')->nullable();
             $table->decimal('amount', 65, 2)->default(0.00);
             $table->decimal('unit_cost', 65, 2)->default(0.00);
             $table->decimal('qty', 65, 2)->default(0.00);

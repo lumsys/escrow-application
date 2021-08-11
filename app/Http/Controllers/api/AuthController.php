@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -70,10 +70,8 @@ class AuthController extends Controller
     public function logout() {
 
         if(Auth::check()) {
-            Auth::user()->token()->revoke();
-
-            dd(Auth::user()->token()->revoke());
-            return response()->json(["status" => "success", "error" => false, "message" => "Success! You are logged out."], 200);
+        Auth::user()->token()->revoke();
+        return response()->json(["status" => "success", "error" => false, "message" => "Success! You are logged out."], 200);
         }
         return response()->json(["status" => "failed", "error" => true, "message" => "Failed! You are already logged out."], 403);
     }
@@ -95,7 +93,6 @@ public function updateProfile(Request $request){
             'last_name' => 'required|min:2|max:45',
             'other_name' => 'required|min:2|max:45',
             'phone' => 'required',
-            'usertype'=> 'required',
             'address' => 'required|min:2|max:200',
             'state' => 'required',
             'local_government' => '',
@@ -105,20 +102,15 @@ public function updateProfile(Request $request){
                 $error = $validator->errors()->all()[0];
                 return response()->json(['status'=>'false', 'message'=>$error, 'data'=>[]],422);
             }else{
-                //$user = User::whereEmail($request->email)->first();
                 $user = user::find($request->user()->id);
-                //dd($request->user()->id);
                 $user->first_name = $request->first_name;
                 $user->last_name = $request->last_name;
                 $user->phone = preg_replace('/^0/','+234',$request->phone);
                 $user->other_name = $request->other_name;
                 $user->address = $request->address;
-                $user->usertype = $request->usertype;
                 $user->state = $request->state;
                 $user->local_government = $request->local_government;
-
                 if($request->profile_picture && $request->profile_picture->isValid())
-
                 {
                     $file_name = time().'.'.$request->profile_picture->extension();
                     $request->profile_picture->move(public_path('images'),$file_name);

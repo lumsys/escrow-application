@@ -40,9 +40,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function product()
+    public function buyer()
     {
-        return $this->hasMany(Product::class, 'user_id', 'id');
+        return $this->hasMany(Buyer::class, 'user_id', 'id');
     }
 
     public function order()
