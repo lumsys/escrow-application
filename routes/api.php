@@ -31,8 +31,9 @@ Route::namespace('API')->group(function () {
 
     Route::middleware(['auth:api'])->group(function() {
         Route::get('details', 'AuthController@details');
-        Route::post('updateProfile', 'AuthController@updateProfile');
-        Route::post('/index', 'ProductController@index');
         Route::get('logout', 'AuthController@logout');
+        Route::post('updateProfile', 'AuthController@updateProfile');
+        Route::post('addProduct/{id}', 'BuyerController@addProduct');
+        Route::post('updateUsertype', 'BuyerController@updateUsertype');
     });
 });
