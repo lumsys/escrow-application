@@ -2,9 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-//use App\Http\Controllers\api\ProductController;
-//use App\Http\Controllers\AuthController;
-//use App\Http\Controllers\ProductController;
+// namespace App\Http\Controllers;
 
 
 /*
@@ -19,21 +17,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+// });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-   return $request->user();
-});
-
-Route::namespace('API')->group(function () {
+    Route::namespace('API')->group(function () {
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
     Route::get('all', 'AuthController@all');
+});
+   // Route::post('resetPassword', 'AuthControllerController@resetPassword');
 
-    Route::middleware(['auth:api'])->group(function() {
+
+    Route::namespace('API')->middleware(['auth:api'])->group(function () {
+    // User Update and related activity
         Route::get('details', 'AuthController@details');
         Route::get('logout', 'AuthController@logout');
+        Route::post('forgot', 'ForgotController@forgot');
         Route::post('updateProfile', 'AuthController@updateProfile');
+    // Add product and related activity
         Route::post('addProduct/{id}', 'BuyerController@addProduct');
-        Route::post('updateUsertype', 'BuyerController@updateUsertype');
+        Route::post('updateUsertype/{id}', 'BuyerController@updateUsertype');
+        Route::get('deleteProduct/{id}', 'BuyerController@deleteProduct');
+    // Show order
+        Route::post('OrderList/{id}', 'OrderController@OrderList');
+    //  List of Services
+        Route::post('storeService/{id}', 'ServiceController@storeService');
+        Route::get('getService', 'ServiceController@getService');
+    //  List of category
+        Route::post('storeCategory/{id}', 'CategoryController@storeCategory');
+        Route::get('getCategory', 'CategoryController@getCategory');
     });
-});

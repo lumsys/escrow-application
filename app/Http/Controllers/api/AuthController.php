@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
 use Carbon\Carbon;
 
 use App\User;
@@ -16,15 +17,15 @@ class AuthController extends Controller
     //
 
     public function register(Request $request){
-        $request->validate([
-           'name' => 'required|string',
-            'email' => 'required|string|unique:users',
-            'password' => 'required| min:6| max:10 |confirmed',
-          
+        $this->validate($request, [
+           // 'name' => 'required|min:3|max:50',
+            'email' => 'email',
+            'password' => 'required|confirmed|min:6',
+            'password_confirmation' => 'same:password',
         ]);
 
         $user = new User([
-           'name' => $request->name,
+           // 'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
 
@@ -84,6 +85,31 @@ class AuthController extends Controller
         catch(NotFoundHttpException $exception) {
             return response()->json(["status" => "failed", "error" => $exception], 401);
         }
+    }
+
+
+    public function forgetPassword(){
+
+        $user = User::where('email',$request->email)->first();
+        
+        return response()->json(["msg" => 'Reset password link sent on your email.']);
+
+    }
+
+    public function resetPassword() {
+        $credentials = request()->validate([
+            'email' => 'required|email',
+            'token' => 'required|string',
+            'password' => 'required|string|confirmed'
+        ]);
+        $reset_password_status = Password::reset($credentials, function ($user, $password) {
+            $user->password = $password;
+            $user->save();
+        });
+        if ($reset_password_status == Password::INVALID_TOKEN) {
+            return response()->json(["msg" => "Invalid token provided"], 400);
+        }
+        return response()->json(["msg" => "Password has been successfully changed"]);
     }
 
 public function updateProfile(Request $request){

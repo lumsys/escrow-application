@@ -6,18 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use App\Buyer;
+//use App\Auth;
 
 class BuyerController extends Controller
 {
     //
-
     public function addProduct(Request $request)
     {
+        //$user = User::where('id',$request->user()->id)->first();
+
         $product = new buyer();
         $product ->product_name=$request->input('product_name');
         $product ->service=$request->input('service');
         $product ->product_category=$request->input('product_category');
-        $product ->user_id=$request->user_id;
+        $product->user_id = $request->user()->id;
         $product ->description=$request->input('description');
         $product ->quantity=$request->input('quantity');
         $product ->amount=$request->input('amount');
@@ -29,21 +31,23 @@ class BuyerController extends Controller
                     $product->file_path = $path;
                 }
         $product -> save();
-        $user = User::where('id',$request->user()->id)->first();
-        $shows = buyer::where(['id' => $user->user_id])->get();
-            return response()->json(['success' => true, $shows]);
+        $user = User::where('id',$request->user()->id)->first()->id;
+        $shows = buyer::where(['user_id' => $user])->get();
+        return response()->json(['success' => true, $shows]);
         }
-        
-    public function updateUsertype(Request $request, $id)
+
+        public function updateUsertype(Request $request)
         {
-        $status = User::where('id', $id)->first();
-        if($status){
-            $status->usertype == 'buyer';
-            $status->save();
-        }else
-        {
-            $status->usertype == 'seller';
-            $status->save();
-        }
+        $user = User::where('id', $request->user()->id)->firstOrFail(); 
+        $user->usertype = $request->usertype;
+        $user->saveOrFail();
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteProduct($id)
+    {
+        $produx = buyer::find($id)->first();
+        $produx->delete();
+        return response()->json(['success' => true, 'message' => 'Product has been successfully deleted']);
     }
 }

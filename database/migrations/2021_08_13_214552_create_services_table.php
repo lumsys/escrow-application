@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBuyerIdOrder extends Migration
+class CreateServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddBuyerIdOrder extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
-            $table->string('buyer_id');
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('user_id')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,11 +28,6 @@ class AddBuyerIdOrder extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
-            $table->dropColumn([
-                'buyer_id'
-            ]);
-        });
+        Schema::dropIfExists('services');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCategoryIdProduct extends Migration
+class AddServiceIdBuyer extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddCategoryIdProduct extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
+        Schema::table('buyers', function (Blueprint $table) {
             //
-            $table->string('category_id');
+            $table->string('service_id')->nullable();
+            $table->string('category_id')->nullable();
         });
     }
 
@@ -26,9 +27,10 @@ class AddCategoryIdProduct extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('buyers', function (Blueprint $table) {
             //
             $table->dropColumn([
+                'service_id',
                 'category_id'
             ]);
         });
